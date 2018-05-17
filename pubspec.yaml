@@ -1,0 +1,9 @@
+name: nats_protocol
+version: 1.0.0
+description: >
+  A Dart-lang implementation of NATS Client
+author: Frank Moreno <frank@ariot.pe>
+homepage: http://www.github.com/kranfix/dart-nats-protocol
+documentation: http://www.github.com/kranfix/dart-nats-protocol#readme
+dependencies:
+  nuid: "^0.6.16"
