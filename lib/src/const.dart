@@ -22,14 +22,6 @@ const OK = OK_OP + CRLF;
 const PING = PING_OP + CRLF;
 const PONG = PONG_OP + CRLF;
 
-// Sizes
-const int CRLF_SIZE = CRLF.length;
-const int OK_SIZE = OK.length;
-const int PING_SIZE = PING.length;
-const int PONG_SIZE = PONG.length;
-const int MSG_OP_SIZE = MSG_OP.length;
-const int ERR_OP_SIZE = ERR_OP.length;
-
 // Regular Expressions
 //final RegExp MSG_RE  = new RegExp(r"^MSG\s+([^\s]+)\s+([^\s]+)\s+(([^\s]+)[^\S\r\n]+)?(\d+)\r\n");
 final RegExp MSG_RE  = new RegExp(r"^MSG\s+([^\s\r\n]+)\s+([^\s\r\n]+)\s+(([^\s\r\n]+)[^\S\r\n]+)?(\d+)\r\n");

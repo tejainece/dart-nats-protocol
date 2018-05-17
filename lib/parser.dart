@@ -81,10 +81,10 @@ class NatsParser {
   _parseMsgPayload() async {
     _state = _State.parsing;
 
-    if (_buf.length >= needed + CRLF_SIZE) {
+    if (_buf.length >= needed + CRLF.length) {
       // Consume msg payload from _buffer and set next parser state.
-      _msg.data = _buf.sublist(0, this.needed);
-      _buf.removeRange(0, this.needed + CRLF_SIZE);
+      _msg.data = _buf.sublist(0, needed);
+      _buf.removeRange(0, needed + CRLF.length);
       await nc.process_msg(_msg);
       _parseCtrlLine();
       return;
