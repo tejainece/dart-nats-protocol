@@ -31,9 +31,10 @@ const int MSG_OP_SIZE = MSG_OP.length;
 const int ERR_OP_SIZE = ERR_OP.length;
 
 // Regular Expressions
-final RegExp MSG_RE  = new RegExp('\AMSG\s+([^\s]+)\s+([^\s]+)\s+(([^\s]+)[^\S\r\n]+)?(\d+)\r\n');
-final RegExp OK_RE   = new RegExp('\A\+OK\s*\r\n');
-final RegExp ERR_RE  = new RegExp('\A-ERR\s+(\'.+\')?\r\n');
-final RegExp PING_RE = new RegExp('\APING\s*\r\n');
-final RegExp PONG_RE = new RegExp('\APONG\s*\r\n');
-final RegExp INFO_RE = new RegExp('\AINFO\s+([^\r\n]+)\r\n');
+//final RegExp MSG_RE  = new RegExp(r"^MSG\s+([^\s]+)\s+([^\s]+)\s+(([^\s]+)[^\S\r\n]+)?(\d+)\r\n");
+final RegExp MSG_RE  = new RegExp(r"^MSG\s+([^\s\r\n]+)\s+([^\s\r\n]+)\s+(([^\s\r\n]+)[^\S\r\n]+)?(\d+)\r\n");
+final RegExp OK_RE   = new RegExp(r"^\+OK\s*\r\n");
+final RegExp ERR_RE  = new RegExp(r"^-ERR\s+(\'.+\')?\r\n");
+final RegExp PING_RE = new RegExp(r"^PING\s*\r\n");
+final RegExp PONG_RE = new RegExp(r"^PONG\s*\r\n");
+final RegExp INFO_RE = new RegExp(r"^INFO\s+([^\r\n]+)\r\n");
