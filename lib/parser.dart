@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-import 'dart:async';
 import 'package:nats_protocol/src/const.dart';
 import 'package:nats_protocol/src/msg.dart';
 import 'package:nats_protocol/src/client_base.dart';
@@ -57,7 +56,7 @@ class NatsParser {
 
     String msgData = new String.fromCharCodes(_buf);
 
-    Match msg = MSG_RE.firstMatch(msgData);
+    Match msg = msg_re.firstMatch(msgData);
     if (msg != null){
       try {
         _msg = new Msg(
@@ -67,7 +66,7 @@ class NatsParser {
         );
         needed = int.parse(msg.group(5));
         _buf.removeRange(0, msg.group(0).length);
-        scheduleMicrotask(_parseMsgPayload);
+        _parseMsgPayload();
         return;
       } catch(e) {
         print('Error: $e');
@@ -75,7 +74,7 @@ class NatsParser {
       }
     }
 
-    Match ok = OK_RE.firstMatch(msgData);
+    Match ok = ok_re.firstMatch(msgData);
     if (ok != null){
       // Do nothing and just skip.
       nc.process_ok();
@@ -84,11 +83,27 @@ class NatsParser {
       return;
     }
 
-    Match err = ERR_RE.firstMatch(msgData);
+    Match err = err_re.firstMatch(msgData);
     if (err != null){
       String err_msg = err.group(1);
       await nc.process_err(err_msg);
       _buf.removeRange(0, err.end);
+      _parseCtrlLine();
+      return;
+    }
+
+    Match ping = ping_re.firstMatch(msgData);
+    if(ping != null){
+      _buf.removeRange(0, ping.end);
+      await nc.process_ping();
+      _parseCtrlLine();
+      return;
+    }
+
+    Match pong = pong_re.firstMatch(msgData);
+    if (pong != null) {
+      _buf.removeRange(0, pong.end);
+      await nc.process_pong();
       _parseCtrlLine();
       return;
     }

@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:nuid/nuid.dart';
+import 'package:nats_protocol/src/utils.dart';
 import 'package:nats_protocol/src/const.dart';
 
 String createInbox() => "_INBOX." + nuid.next();
@@ -12,33 +13,42 @@ class Msg {
 
   Msg({this.subject: "", this.sid, this.reply: "", this.data});
 
-  static String pub(String subject, String payload, [String replyTo]){
+  static Uint8List pub(String subject, Uint8List payload, [String replyTo=""]){
+    Uint8List msg = new Uint8List.fromList(b_PUB_OP);
+    msg.addAll(string2List(' ${subject}'));
+    if(replyTo.isNotEmpty){
+      msg.addAll(string2List(' ${replyTo}'));
+    }
+
+    //return "${s_PUB_OP} ${subjectAndReplyTo} ${n}\r\n${payload}\r\n";
     if(payload == null){
-      payload = EMPTY;
+      payload = b_EMPTY;
     }
     int n = payload.length;
-
-    String subjectAndReplyTo = subject;
-    if(replyTo != null && replyTo.isNotEmpty){
-      subjectAndReplyTo = '${subject} ${replyTo}';
-    }
-
-    return "${PUB_OP} ${subjectAndReplyTo} ${replyTo} ${n}\r\n${payload}\r\n";
+    msg.addAll(string2bytes(' ${n}'));
+    msg.addAll(b_CRLF);
+    msg.addAll(payload);
+    msg.addAll(b_CRLF);
+    return msg;
   }
 
-  static String sub(String subject, int sid, [String queueGroup]){
-    String subjectAndQueue = subject;
-    if(queueGroup != null && queueGroup.isNotEmpty){
-      subjectAndQueue = '${subject} ${queueGroup}';
+  static Uint8List sub(String subject, int sid, [String queueGroup=""]){
+    Uint8List msg = new Uint8List.fromList(b_SUB_OP);
+    msg.addAll(string2bytes(' ${subject}'));
+    if(queueGroup.isNotEmpty){
+      msg.addAll(string2bytes(' ${queueGroup}'));
     }
-    return "${SUB_OP} ${subjectAndQueue} ${sid}\r\n";
+    msg.addAll(b_CRLF);
+    return msg;
   }
 
-  static String unsub(int sid, [int maxMsg]){
-    String sidAndMax = '${sid}';
+  static Uint8List unsub(int sid, [int maxMsg]){
+    Uint8List msg = new Uint8List.fromList(b_UNSUB_OP);
+    msg.addAll(string2bytes('${sid}'));
     if(maxMsg != null){
-      sidAndMax = '${sid} ${maxMsg}';
+      msg.addAll(string2bytes(' ${maxMsg}'));
     }
-    return "${UNSUB_OP} ${sidAndMax}\r\n";
+    msg.addAll(b_CRLF);
+    return msg;
   }
 }
