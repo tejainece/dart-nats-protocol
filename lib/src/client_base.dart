@@ -2,7 +2,7 @@ import 'package:nats_protocol/src/msg.dart';
 
 abstract class NatsClientBase {
   NatsClientBase(){
-    
+
   }
 
   process_msg(Msg msg) async {
@@ -15,4 +15,11 @@ abstract class NatsClientBase {
     print('    $payload');
   }
 
+  process_ok() async {
+    print('ok');
+  }
+
+  process_err(String error) async {
+    print('Error: $error');
+  }
 }

@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'dart:async';
 import 'package:nats_protocol/src/const.dart';
 import 'package:nats_protocol/src/msg.dart';
 import 'package:nats_protocol/src/client_base.dart';
@@ -58,7 +59,6 @@ class NatsParser {
 
     Match msg = MSG_RE.firstMatch(msgData);
     if (msg != null){
-      print('hice match');
       try {
         _msg = new Msg(
           subject: msg.group(1),
@@ -67,12 +67,30 @@ class NatsParser {
         );
         needed = int.parse(msg.group(5));
         _buf.removeRange(0, msg.group(0).length);
-        _parseMsgPayload();
+        scheduleMicrotask(_parseMsgPayload);
         return;
       } catch(e) {
         print('Error: $e');
         //throw ErrProtocol("nats: malformed MSG");
       }
+    }
+
+    Match ok = OK_RE.firstMatch(msgData);
+    if (ok != null){
+      // Do nothing and just skip.
+      nc.process_ok();
+      _buf.removeRange(0, ok.end);
+      _parseCtrlLine();
+      return;
+    }
+
+    Match err = ERR_RE.firstMatch(msgData);
+    if (err != null){
+      String err_msg = err.group(1);
+      await nc.process_err(err_msg);
+      _buf.removeRange(0, err.end);
+      _parseCtrlLine();
+      return;
     }
 
     _state = _State.awaitingCtrlLine;
