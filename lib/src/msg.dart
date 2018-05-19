@@ -15,10 +15,10 @@ class Msg {
 
   static Uint8List pub(String subject, Uint8List payload, [String replyTo=""]){
     Uint8List msg = new Uint8List.fromList(b_PUB_OP);
-    msg.addAll(string2List(' ${subject}'));
-    if(replyTo.isNotEmpty){
-      msg.addAll(string2List(' ${replyTo}'));
-    }
+    msg.addAll(b_SPC);
+    msg.addAll(string2List(subject));
+    msg.addAll(b_SPC);
+    msg.addAll(string2List(replyTo));
 
     //return "${s_PUB_OP} ${subjectAndReplyTo} ${n}\r\n${payload}\r\n";
     if(payload == null){

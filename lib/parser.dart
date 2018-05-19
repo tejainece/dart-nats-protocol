@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 import 'package:nats_protocol/src/const.dart';
 import 'package:nats_protocol/src/msg.dart';
@@ -104,6 +105,15 @@ class NatsParser {
     if (pong != null) {
       _buf.removeRange(0, pong.end);
       await nc.process_pong();
+      _parseCtrlLine();
+      return;
+    }
+
+    Match info = info_re.firstMatch(msgData);
+    if (info != null){
+      Map<String,dynamic> srv_info = jsonDecode(info.group(1));
+      await nc.process_info(srv_info);
+      _buf.removeRange(0, info.end);
       _parseCtrlLine();
       return;
     }

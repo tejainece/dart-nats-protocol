@@ -9,6 +9,7 @@ String msgOk = "+OK\r\n";
 String msgErr = "-ERR 'Some error message'\r\n";
 String msgPing = "PING\r\n";
 String msgPong = "PONG\r\n";
+String msgInfo = 'INFO {"server_id":"U6XtKb2U7oS0Hx18dNEraV","version":"1.0.6","git_commit":"","go":"go1.9.4","host":"0.0.0.0","port":4222,"auth_required":false,"ssl_required":false,"tls_required":false,"tls_verify":false,"max_payload":1048576}\r\n';
 
 
 class Client extends NatsClientBase {}
@@ -23,6 +24,7 @@ main() async {
   Uint8List bufErr    = string2bytes(msgErr);
   Uint8List bufPing   = string2bytes(msgPing);
   Uint8List bufPong   = string2bytes(msgPong);
+  Uint8List bufInfo   = string2bytes(msgInfo);
 
 
   print('----------------------');
@@ -48,6 +50,10 @@ main() async {
   print('----------------------');
   print('Msg:\n$msgPong');
   parser.parse(bufPong);
+
+  print('----------------------');
+  print('Msg:\n$msgPong');
+  parser.parse(bufInfo);
 
   print('----------------------');
 } 

@@ -1,7 +1,9 @@
 import 'dart:typed_data';
 import 'package:nats_protocol/src/msg.dart';
+import 'package:nats_protocol/src/const.dart';
 
 abstract class NatsClientBase {
+  bool isSvrAlive = false;
   NatsClientBase(){
 
   }
@@ -35,10 +37,14 @@ abstract class NatsClientBase {
   }
 
   process_ping() async {
-    sendString('PONG');
+    send(b_PONG);
   }
 
   process_pong() async {
     print('Processing pong');
+  }
+
+  process_info(Map<String,dynamic> info) async {
+    print(info);
   }
 }
