@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 import 'package:nats_protocol/parser.dart';
-import 'package:nats_protocol/src/client_base.dart';
+import 'package:nats_protocol/client_base.dart';
 import 'package:nats_protocol/src/utils.dart';
 
 String msgSimple = "MSG foo.bar 1 21\r\nMessage without reply\r\n";

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:nats_protocol/src/const.dart';
 import 'package:nats_protocol/src/msg.dart';
-import 'package:nats_protocol/src/client_base.dart';
+import 'package:nats_protocol/client_base.dart';
 
 // States
 const int MAX_CONTROL_LINE_SIZE = 1024;
