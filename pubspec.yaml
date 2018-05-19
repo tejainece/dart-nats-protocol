@@ -1,5 +1,5 @@
 name: nats_protocol
-version: 1.0.0
+version: 0.4.0
 description: >
   A Dart-lang implementation of NATS Client
 author: Frank Moreno <frank@ariot.pe>
